@@ -1,6 +1,6 @@
 from argparse import Namespace
 
-RUNTIME_ARGS: Namespace = None
+RUNTIME_ARGS: Namespace
 
 
 def init_env(args: Namespace):

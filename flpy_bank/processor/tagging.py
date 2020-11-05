@@ -3,6 +3,7 @@ from typing import List, Any, Dict
 
 import yaml
 
+from flpy_bank import env
 from flpy_bank.objects import Record
 from flpy_bank.objects.tagging import TagRule, CONDITION_EXISTS, CONDITION_EQ, CONDITION_NEQ, CONDITION_CONTAINS, \
     CONDITION_NOT_CONTAINS, CONDITION_AND, CONDITION_OR
@@ -10,14 +11,17 @@ from flpy_bank.processor import RecordProcessor
 
 
 def read_tag_rules_from_file(path: str) -> List[TagRule]:
-    with open(path, 'r') as f:
-        r: List[Dict[str, Any]] = yaml.safe_load(f)
-        return [TagRule(**i) for i in r]
+    try:
+        with open(path, 'r') as f:
+            r: List[Dict[str, Any]] = yaml.safe_load(f)
+            return [TagRule(**i) for i in r]
+    except FileNotFoundError:
+        raise RuntimeError('Couldn\'t find tag rule file at {}'.format(path))
 
 
 class TagProcessor(RecordProcessor):
     def __init__(self):
-        self.rules = read_tag_rules_from_file('rules.yml')
+        self.rules = read_tag_rules_from_file(env.RUNTIME_ARGS.tag_rules)
 
     def _process_record(self, record: Record):
         record_dict = asdict(record)
