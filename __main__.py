@@ -31,8 +31,7 @@ p.add_argument('-P',
                action='extend',
                nargs='+',
                help='One or more processors to run before exporting the data',
-               choices=PROCESSOR_REGISTRY.keys(),
-               default=['tag'])
+               choices=PROCESSOR_REGISTRY.keys())
 p.add_argument('--tagrules',
                dest='tag_rules',
                help='A YAML file containing tagging rules',
